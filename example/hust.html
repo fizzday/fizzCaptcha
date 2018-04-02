@@ -2,27 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
     <title>自动登录</title>
     <style>
-        table {
-            width: 500px;
-            height: 100%;
-            margin: 2rem auto;
-            font-size: 1.5rem;
+        div.box{
+            width:100%;
+            height:100%;
         }
-
         div.margin-auto {
-            width: 500px;
+            width: 20rem;
             height: 100%;
-            margin: 2rem auto;
-            font-size: 1.5rem;
+            margin: 0 auto;
+            font-size: 1.2rem;
         }
 
         input {
             height: 2rem;
             line-height: 2rem;
             width: 20rem;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
+            border: 1px solid #000;
         }
 
         button {
@@ -46,29 +45,26 @@
     </style>
 </head>
 <body>
-<center><h1>华中科技大学自动登录系统</h1></center>
+<center><h2>华中科技大学自动登录系统</h2></center>
 <div class="box">
-    <table class="margin-auto">
-        <tr>
-            <td>用户名</td>
-            <td><input type="text" class="username"></td>
-        </tr>
-        <tr>
-            <td>密码</td>
-            <td><input type="password" class="password"></td>
-        </tr>
-        <tr>
-            <td>&nbsp</td>
-            <td>
-                <button onclick="login()">登录</button>
-            </td>
-        </tr>
-    </table>
+    <div class="margin-auto">
+        <p>用户名</p>
+        <p><input type="text" class="username" value="W201714333" /></p>
+
+        <p>密码</p>
+        <p><input type="text" class="password" value="420321199012032411" /></p>
+
+        <p>登录次数</p>
+        <p><input type="text" class="loginnum" value="1" /></p>
+        <p style="font-size: 0.5rem;">建议一次填写10次以内,避免服务器压力过大,加载失败</p>
+
+        <p><a href="javascript:;" onclick="login()">登录</a></p>
+    </div>
     <div class="result margin-auto">
     </div>
 </div>
 <div class="mask">
-    <br><br><br><br><br><br><br><br>
+    <br><br><br><br><br><br><br>
     <center><h2 id="second">数据加载中......</h2></center>
 </div>
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
@@ -95,10 +91,11 @@
 //        return
         $(function () {
             var url = "http://127.0.0.1:5000/login";
-            var url = "http://tmp.cc/api";
+//            var url = "http://tmp.cc/api";
             var param = {
                 "username": $(".username").val().trim(),
-                "password": $(".password").val().trim()
+                "password": $(".password").val().trim(),
+                "loginnum": $(".loginnum").val().trim()
             };
             $.post(url, param, function (res) {
 //                console.log(res)

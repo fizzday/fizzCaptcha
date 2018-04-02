@@ -1,4 +1,3 @@
-
 import random
 import hashlib
 import requests
@@ -6,22 +5,11 @@ from PIL import Image
 from bs4 import BeautifulSoup
 from fizzCaptcha import recognize
 
-
-def test():
-    return "333"
 def md5(pwd):
     m = hashlib.md5()
     # 参数必须是byte类型，否则报Unicode-objects must be encoded before hashing错误
     m.update(pwd.encode(encoding='utf-8'))
     return m.hexdigest()
-
-login_params = {
-    "loginId": "W201714333123456",
-    "passwd": md5("42032119901203"),
-    "auto": "false",
-    "info": "0",
-    "authCode": ""
-}
 
 headers = {
     "Content-Type": "application/x-www-form-urlencoded",
@@ -38,30 +26,31 @@ url_login_centerLogin_get = "http://www.hust-snde.com/sso/login_centerLogin.acti
 url_login_centerLogin_get_header = {"Upgrade-Insecure-Requests": "1"}
 # loginSuccess
 url_loginSuccess_get = "http://www.hust-snde.com/web/loginSuccess.jsp"
-# whatyVerify
+# whatyVerify 302
 url_whatyVerify_post = "http://cas.hust-snde.com/whatyVerify"
-whatyVerify_params = {
-    "username": login_params["loginId"],
-    "password": login_params["passwd"],
-    "service": "http://sns.hust-snde.com/learning/sso/login_webTrnLogin.action?ssoUser.loginId=" + login_params[
-        "loginId"] + "&siteCode=code62"
-}
-# login_webTrnLogin
-url_login_webTrnLogin_get = "http://sns.hust-snde.com/learning/sso/login_webTrnLogin.action?ssoUser.loginId=" + \
-                            login_params[
-                                "loginId"] + "&siteCode=code62"
-# login
-url_login_get = "http://cas.hust-snde.com/login?service=http://sns.hust-snde.com/learning/sso/login_webTrnLogin.action?ssoUser.loginId=" + \
-                login_params[
-                    "loginId"] + "&siteCode=code62&loginpage=http://sns.hust-snde.com:80/learning/html/error_login.jsp"
-# home
-url_home_get = "http://sns.hust-snde.com/learning/entity/student/student_index.action"
 
-def login(username,password):
-    global login_params
+
+# home
+# url_home_get = "http://sns.hust-snde.com/learning/entity/student/student_index.action"
+
+def login(username, password):
     # 设置用户名和密码
-    login_params["loginId"] = username
-    login_params["passwd"] = md5(password)
+    login_params = {
+        # "loginId": "W201714333123456",
+        # "passwd": md5("42032119901203"),
+        "loginId": username,
+        "passwd": md5(password),
+        "auto": "false",
+        "info": "0",
+        "authCode": ""
+    }
+    # 认证跳转参数
+    whatyVerify_params = {
+        "username": login_params["loginId"],
+        "password": login_params["passwd"],
+        "service": "http://sns.hust-snde.com/learning/sso/login_webTrnLogin.action?ssoUser.loginId=" +
+                   login_params["loginId"] + "&siteCode=code62"
+    }
 
     session = requests.Session()
 
@@ -75,26 +64,37 @@ def login(username,password):
     login_params["authCode"] = code
     # print(code)
     # 执行登录
-    session.post(url_login_post, headers=headers)
+    session.post(url_login_post, data=login_params, headers=headers)
 
     # 各种中转访问
-    session.get(url_login_centerLogin_get, headers=dict(headers, **url_login_centerLogin_get_header))
-    session.get(url_loginSuccess_get, headers=dict(headers, **url_login_centerLogin_get_header))
-    session.post(url_whatyVerify_post, data=whatyVerify_params,
-                 headers=dict(headers, **url_login_centerLogin_get_header))
-    session.get(url_login_webTrnLogin_get, headers=dict(headers, **url_login_centerLogin_get_header))
-    html = session.get(url_login_get, headers=dict(headers, **url_login_centerLogin_get_header),
-                       allow_redirects=False)
-    url_new_get = html.headers['Location']
-    html2 = session.get(url_new_get, headers=dict(headers, **url_login_centerLogin_get_header),
-                        allow_redirects=False)
-    url_new_get2 = html2.headers['Location']
-    session.get(url_new_get2, headers=dict(headers, **url_login_centerLogin_get_header))
-    session.get(url_login_webTrnLogin_get, headers=dict(headers, **url_login_centerLogin_get_header))
-    r = session.get(url_home_get, headers=dict(headers, **url_login_centerLogin_get_header))
+    headers302 = dict(headers, **url_login_centerLogin_get_header)
+
+    session.get(url_login_centerLogin_get, headers=headers302)
+    session.get(url_loginSuccess_get, headers=headers302)
+    # 各种 302
+    html1 = session.post(url_whatyVerify_post, data=whatyVerify_params, headers=headers302, allow_redirects=False)
+    # login_webTrnLogin 302 得到
+    html2 = session.get(html1.headers['Location'], headers=headers302, allow_redirects=False)
+    # error_login 302 得到
+    html3 = session.get(html2.headers['Location'], headers=headers302, allow_redirects=False)
+    # login_webTrnLogin 302 得到
+    html4 = session.get(html3.headers['Location'], headers=headers302, allow_redirects=False)
+    # login_webTrnLogin 302 得到
+    html5 = session.get(html4.headers['Location'], headers=headers302, allow_redirects=False)
+    # student_index 302 得到
+    r = session.get(html5.headers['Location'], headers=headers302)
 
     # 查看登录次数
     soup = BeautifulSoup(r.text, "html5lib")
     res = soup.select("#announcement")[0].get_text()
 
     return res
+
+
+if __name__ == "__main__":
+    username = "W201714333"
+    password = "420321199012032411"
+
+    res = login(username, password)
+
+    print(res)

@@ -19,27 +19,38 @@ app = Flask(__name__)
 
 flask_cors.CORS(app, supports_credentials=True)
 
-@app.route('/')
+@app.route('/', methods=["GET", "POST"])
 def hello_world():
     return "hello world!"
 
-@app.route('/login')
+@app.route('/login', methods=["GET", "POST"])
 def login():
     # return "sdf"
-    username = request.args.get("username")
-    password = request.args.get('password')
+    username, password, loginnum = "","",5
+
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get('password')
+        loginnum = request.form.get('loginnum') if True else loginnum
+    elif request.method == "GET":
+        username = request.args.get("username")
+        password = request.args.get('password')
+        loginnum = request.args.get('loginnum') if True else loginnum
+        pass
 
     if not username or not password:
         return "用户名或密码不能为空..."
 
     # return username+password
-    res = hust.login(username,password)
+    res = ""
+    for i in range(int(loginnum)):
+        res = hust.login(username,password)
     return res
 
 if __name__ == '__main__':
     from werkzeug.contrib.fixers import ProxyFix
     app.wsgi_app = ProxyFix(app.wsgi_app)
-    app.run()
+    app.run(debug=True)
 
 # if __name__ == "__main__":
 #     # try:
