@@ -27,6 +27,9 @@
         button {
             font-size: 1rem;
         }
+        div.result {
+            color: green;
+        }
 
         div.mask {
             width: 100%;
@@ -49,10 +52,10 @@
 <div class="box">
     <div class="margin-auto">
         <p>用户名</p>
-        <p><input type="text" class="username" value="W201714333" /></p>
+        <p><input type="text" class="username" placeholder="这里输入学号" /></p>
 
         <p>密码</p>
-        <p><input type="text" class="password" value="420321199012032411" /></p>
+        <p><input type="text" class="password" placeholder="这里输入密码" /></p>
 
         <p>登录次数</p>
         <p><input type="text" class="loginnum" value="1" /></p>
@@ -90,7 +93,7 @@
 //        clearInterval(interval);
 //        return
         $(function () {
-            var url = "http://127.0.0.1:5000/login";
+//            var url = "http://127.0.0.1:5000/login";
 //            var url = "http://tmp.cc/api";
             var url = "http://hust.fizzday.net/api/login";
             var param = {

@@ -39,11 +39,14 @@ def login():
         pass
 
     if not username or not password:
-        return "用户名或密码不能为空..."
+        return "用户名和密码不能为空..."
 
     # return username+password
     res = ""
-    for i in range(int(loginnum)):
+    loginnumInt = int(loginnum)
+    if loginnumInt>10 :
+        return "请一次请求1保持在10次以内!!!"
+    for i in range(loginnumInt):
         res = hust.login(username,password)
     return res
 
