@@ -2,13 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
     <title>自动登录</title>
     <style>
-        div.box{
-            width:100%;
-            height:100%;
+        div.box {
+            width: 100%;
+            height: 100%;
         }
+
         div.margin-auto {
             width: 20rem;
             height: 100%;
@@ -27,8 +29,35 @@
         button {
             font-size: 1rem;
         }
+
         div.result {
             color: green;
+        }
+
+        div.prize {
+            width: 20rem;
+            margin: 0 auto;
+        }
+
+        .prize .payimg {
+            width: 48%;
+            float: left;
+        }
+
+        .prize .payimg:last-child {
+            margin-left: 4%;
+        }
+
+        .prize img {
+            width: 100%;
+        }
+        
+        .foot {
+            clear: both;
+        }
+
+        .result {
+            border: 1px solid blue;
         }
 
         div.mask {
@@ -52,23 +81,39 @@
 <div class="box">
     <div class="margin-auto">
         <p>用户名</p>
-        <p><input type="text" class="username" placeholder="这里输入学号" /></p>
+        <p><input type="text" class="username" placeholder="这里输入学号"/></p>
 
         <p>密码</p>
-        <p><input type="text" class="password" placeholder="这里输入密码" /></p>
+        <p><input type="text" class="password" placeholder="这里输入密码"/></p>
 
         <p>登录次数</p>
-        <p><input type="text" class="loginnum" value="1" /></p>
+        <p><input type="text" class="loginnum" value="1"/></p>
         <p style="font-size: 0.5rem;">建议一次填写10次以内,避免服务器压力过大,加载失败</p>
 
         <p><a href="javascript:;" onclick="login()">登录</a></p>
     </div>
     <div class="result margin-auto">
     </div>
-</div>
-<div class="mask">
-    <br><br><br><br><br><br><br>
-    <center><h2 id="second">数据加载中......</h2></center>
+    <div class="mask">
+        <br><br><br><br><br><br><br>
+        <center><h2 id="second">数据加载中......</h2></center>
+    </div>
+    <div class="prize">
+        <div><p>各位老爷用的好, 就打赏一点, 记得备注名字哦, 我会在下边特别鸣谢的 !!!</p></div>
+        <div class="payimg">
+            <p>支付宝</p>
+            <img src="./ali.jpeg" alt="">
+        </div>
+        <div class="payimg">
+            <p>微信</p>
+            <img src="./wx.jpeg" alt="">
+        </div>
+    </div>
+    <div class="foot margin-auto">
+        <p>作者: 会飞的鱼</p>
+        <p>QQ: 864759073</p>
+        <p>发布时间: 2018-04-01</p>
+    </div>
 </div>
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 <script>
@@ -76,7 +121,7 @@
     var t
 
     function timedCount() {
-        document.getElementById('second').innerHTML = "用时 "+c+" s"
+        document.getElementById('second').innerHTML = "用时 " + c + " s"
         c = c + 1
         t = setTimeout("timedCount()", 1000)
     }
