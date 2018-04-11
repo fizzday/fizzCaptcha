@@ -163,10 +163,11 @@ if __name__ == '__main__':
 
     conf = config.config
 
-    fc = FizzCaptcha()
-    fc.setConfig(conf)
+    fc = FizzCaptcha().setConfig(conf)
 
     image, text = fc.getCaptcha(save="./a.png")
+
+    print(text)
 
     plt.imshow(image)
 
