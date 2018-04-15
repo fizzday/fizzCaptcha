@@ -7,26 +7,64 @@
 # @File    : hust_login.py
 #
 # 刷华中科技大学教务系统登录次数
-import sys,os
+import base64
+import json
+import sys, os, io
+
 sys.path.append(os.path.dirname(os.path.dirname(os.getcwd())))
 
 from fizzCaptcha.example import hust
 
-from flask import Flask,request
+from flask import Flask, request, send_file
 import flask_cors
 
 app = Flask(__name__)
 
 flask_cors.CORS(app, supports_credentials=True)
 
+
 @app.route('/', methods=["GET", "POST"])
 def hello_world():
     return "hello world!"
 
+
+@app.route('/getCaptcha', methods=["GET", "POST"])
+def getCaptcha():
+    # return "sf"
+    from fizzCaptcha.captcha_generate.FizzCaptcha import FizzCaptcha
+
+    config_json = request.form.get("config")
+
+    fc = FizzCaptcha()
+
+    if config_json:
+        config = json.loads(config_json)
+        # 处理字体
+        # config["font"]["path"] = "../captcha_generate/"+config["font"]["name"]+".ttf"
+        # 处理是否噪点等
+        config["point"] = eval(config["point"])
+        config["line"] = eval(config["line"])
+        config["tilt"] = eval(config["tilt"])
+
+        # print(config)
+        # return json.dumps(config)
+        fc.setConfig(config)
+
+    image, text = fc.getCaptcha()
+
+    byte_io = io.BytesIO()
+    image.save(byte_io, 'PNG')
+    # base64
+    return u"data:image/png;base64," + base64.b64encode(byte_io.getvalue()).decode('ascii')
+    # flask 返回
+    byte_io.seek(0)
+    return send_file(byte_io, mimetype='image/png')
+
+
 @app.route('/login', methods=["GET", "POST"])
 def login():
     # return "sdf"
-    username, password, loginnum = "","",5
+    username, password, loginnum = "", "", 5
 
     if request.method == "POST":
         username = request.form.get("username")
@@ -44,14 +82,16 @@ def login():
     # return username+password
     res = ""
     loginnumInt = int(loginnum)
-    if loginnumInt>10 :
+    if loginnumInt > 10:
         return "请一次请求1保持在10次以内!!!"
     for i in range(loginnumInt):
-        res = hust.login(username,password)
+        res = hust.login(username, password)
     return res
+
 
 if __name__ == '__main__':
     from werkzeug.contrib.fixers import ProxyFix
+
     app.wsgi_app = ProxyFix(app.wsgi_app)
     app.run(debug=True)
 
