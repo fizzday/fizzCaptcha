@@ -11,12 +11,17 @@ import base64
 import json
 import sys, os, io
 
+import requests
+
+from fizzCaptcha import recognize
+
 sys.path.append(os.path.dirname(os.path.dirname(os.getcwd())))
 
 from fizzCaptcha.example import hust
 
 from flask import Flask, request, send_file
 import flask_cors
+from PIL import Image
 
 app = Flask(__name__)
 
@@ -27,7 +32,27 @@ flask_cors.CORS(app, supports_credentials=True)
 def hello_world():
     return "hello world!"
 
+# 验证码识别
+@app.route('/recognize_tesseract', methods=["GET", "POST"])
+def recognizeTesseract():
+    if request.method == "GET":
+        url = request.args.get("url")
+        # return url
+        file = requests.get(url, stream=True).raw
+    else:
+        file = request.files['file']
+        # file.save("/Users/fizz/www/python/fizzCaptcha/example/"+file.filename)
 
+    # 识别验证码
+    im = Image.open(file)
+    code = recognize.recognize(im)
+
+    return code
+
+
+
+
+# 验证码生成
 @app.route('/getCaptcha', methods=["GET", "POST"])
 def getCaptcha():
     # return "sf"
@@ -60,7 +85,7 @@ def getCaptcha():
     byte_io.seek(0)
     return send_file(byte_io, mimetype='image/png')
 
-
+# 华科大模拟登录
 @app.route('/login', methods=["GET", "POST"])
 def login():
     # return "sdf"

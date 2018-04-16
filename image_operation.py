@@ -1,4 +1,5 @@
 from PIL import Image
+# from matplotlib import pyplot as plt
 
 # 图片的背景颜色, 缩放图片, 填充背景色时会用到
 BG_COLOR = None
@@ -194,7 +195,7 @@ def remove_noise_pixel(img, noise_point_list):
 
 
 # 获取干净的二值化去噪点后的图片
-def get_clear_bin_image(image, threshold=140):
+def get_clear_bin_image(image, threshold=180):
     """
     获取干净的二值化的图片。
     图像的预处理：
@@ -222,7 +223,7 @@ def get_clear_bin_image(image, threshold=140):
 
 
 if __name__ == "__main__":
-    img_path = "./images/test.jpg"
+    img_path = "./images/test2.png"
     # img_path = requests.get("http://www.hust-snde.com/center/sso/authimg?"+str(random.random()))
     # print(Image.open(img_path.content))
     # exit()
@@ -231,12 +232,15 @@ if __name__ == "__main__":
     # 二值去噪
     im = get_clear_bin_image(im)
 
-    # resize 缩放
-    size = (100, 100)
-    im = image_resize(im, size, (255, 255, 255, 100))
+    # plt.imshow(im)
+    # plt.show()
 
+    # # resize 缩放
+    # size = (100, 100)
+    # im = image_resize(im, size, (255, 255, 255, 100))
+    #
     im.show()
 
-    # 保存
-    modified_path = "./images/1.png"
-    im.save(modified_path)
+    # # 保存
+    # modified_path = "./images/test2.png"
+    # im.save(modified_path)

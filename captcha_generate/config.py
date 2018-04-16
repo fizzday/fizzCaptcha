@@ -15,14 +15,14 @@ config = {
         "bg_color": (255, 255, 255),  # 验证码背景色(rgba)
         "font":{
             # "path":"/Users/fizz/www/fonts/MonacoYahei.ttf",
-            "path":"",
+            "path":"/Users/fizz/www/python/fizzCaptcha/captcha_generate/SCPYahei.ttf", # Source Code Pro + Yahei
             "size":32,
             "color":"",
             "name":"",
             # "geo":[(10,10),(50,10),(90,10),(130,10)],   # 字符坐标
         },
         "point": False,  # 是否启用噪点, 默认不启用. 启用后, 则启用 point_param 相关参数配置
-        "point_num": 0,  # 噪点个数, 如果为0, 则随机个数(100 ~ 200个)
+        "point_num": 0,  # 噪点个数, 如果为0, 则随机个数(100 ~ 1000个)
         "point_color": (0, 0, 0, 0), # 噪点颜色, 如果没有值, 则随机颜色
 
         "line": False,  # 是否启用干扰线, 默认不启用. 启用后, 则启用 line_param 相关参数配置

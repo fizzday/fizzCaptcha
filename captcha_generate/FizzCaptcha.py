@@ -82,14 +82,14 @@ class FizzCaptcha(object):
         config = self.config
         if config["line"]:
             # 线条数
-            num = config["line_num"] if config["line_num"] else random.randint(3,10)
+            num = config["line_num"] if config["line_num"] else random.randint(1,10)
             # 颜色
             fill = self.config["line_color"]
 
             draw = ImageDraw.Draw(self.image)
             for i in range(0, num):
-                fill = fill if fill else self.randRGB(True)
-                draw.line((self.randPoint(),self.randPoint()), fill=fill, width=self.config["line_width"])
+                fillcolor = fill if fill else self.randRGB(True)
+                draw.line((self.randPoint(),self.randPoint()), fill=fillcolor, width=self.config["line_width"])
             del draw
 
     # 画噪点
@@ -97,7 +97,7 @@ class FizzCaptcha(object):
         config = self.config
         if config["point"]:
             # 噪点数
-            num = config["point_num"] if config["point_num"] else random.randint(100,200)
+            num = config["point_num"] if config["point_num"] else random.randint(100,500)
             # 颜色
             fill = self.config["point_color"]
 
@@ -120,7 +120,7 @@ class FizzCaptcha(object):
         # 获取字体坐标
         pos = self._getPos()
         # 获取字体
-        fontPath = self.config["font"]["path"] if self.config["font"]["path"] else os.path.dirname(__file__)+"/MonacoYahei.ttf"
+        fontPath = self.config["font"]["path"] if self.config["font"]["path"] else os.path.dirname(__file__)+"/SCPYahei.ttf"
         # 设置大小
         font = ImageFont.truetype(font=fontPath, size=self.config["font"]["size"])
 
