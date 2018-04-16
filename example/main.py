@@ -10,12 +10,11 @@
 import base64
 import json
 import sys, os, io
-
 import requests
 
-from fizzCaptcha import recognize
-
 sys.path.append(os.path.dirname(os.path.dirname(os.getcwd())))
+
+from fizzCaptcha import recognize
 
 from fizzCaptcha.example import hust
 
