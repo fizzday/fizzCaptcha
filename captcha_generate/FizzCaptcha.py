@@ -51,7 +51,7 @@ class FizzCaptcha(object):
         start = 0  # 起始坐标
         for i in range(0, config["chars_num"]):
             x = start + self.config["font"]["size"] * i + random.randint(0, gap) + gap * i
-            y = random.randint(-5, 5)
+            y = random.randint(1, 18)
             pos.append((x, y))
 
         return pos
