@@ -195,7 +195,7 @@ def remove_noise_pixel(img, noise_point_list):
 
 
 # 获取干净的二值化去噪点后的图片
-def get_clear_bin_image(image, threshold=180):
+def get_clear_bin_image(image, threshold=140):
     """
     获取干净的二值化的图片。
     图像的预处理：
@@ -211,19 +211,20 @@ def get_clear_bin_image(image, threshold=180):
     table = get_bin_table(threshold)
     out = imgry.point(table, '1')  # 变成二值图片:0表示黑色,1表示白色
 
-    noise_point_list = []  # 通过算法找出噪声点,第一步比较严格,可能会有些误删除的噪点
-    for x in range(out.width):
-        for y in range(out.height):
-            res_9 = sum_9_region(out, x, y)
-            if (0 < res_9 < 3) and out.getpixel((x, y)) == 0:  # 找到孤立点
-                pos = (x, y)  #
-                noise_point_list.append(pos)
-    remove_noise_pixel(out, noise_point_list)
+    # noise_point_list = []  # 通过算法找出噪声点,第一步比较严格,可能会有些误删除的噪点
+    # for x in range(out.width):
+    #     for y in range(out.height):
+    #         res_9 = sum_9_region(out, x, y)
+    #         if (0 < res_9 < 3) and out.getpixel((x, y)) == 0:  # 找到孤立点
+    #             pos = (x, y)  #
+    #             noise_point_list.append(pos)
+    # remove_noise_pixel(out, noise_point_list)
     return out
 
 
 if __name__ == "__main__":
-    img_path = "./images/test2.png"
+    # img_path = "./images/test2.png"
+    img_path = "/Users/fizz/www/tmp/cache/index.jpeg"
     # img_path = requests.get("http://www.hust-snde.com/center/sso/authimg?"+str(random.random()))
     # print(Image.open(img_path.content))
     # exit()
