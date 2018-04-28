@@ -1,2 +1,2 @@
-# import sys,os
-# sys.path.append(os.path.dirname(os.getcwd()))
+import sys,os
+sys.path.append(os.path.dirname(__file__))

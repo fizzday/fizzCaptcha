@@ -1,4 +1,6 @@
 # 验证码识别主程序
+import os
+
 from pytesseract import pytesseract
 from fizzCaptcha import config,image_operation,captcha_from_path
 from PIL import Image
@@ -26,7 +28,9 @@ if __name__=="__main__":
     # img_path = "/Users/fizz/Desktop/11.jpg"
     # img_path = "/Users/fizz/Desktop/22.png"
     # img_path = "/Users/fizz/Downloads/测试/13771302714&2.jpg"
-    image_path = "./images/"
+    # image_path = "./images/"
+    # print(os.path.dirname(__file__))
+    image_path = os.getcwd()+"/images/"
     img_list = captcha_from_path.gen_list(image_path)
 
     with open("./result.txt", "a+") as f:
@@ -37,7 +41,7 @@ if __name__=="__main__":
                 # 二值化并去噪点
                 # im = image_operation.get_clear_bin_image(im)
                 # 识别汉字
-                res1 = recognize(im, lang="eng+chi_sim")
+                res1 = recognize(im, lang="schi_sims")
                 text_ch = res1[:2]
                 text_ch2 = res1[2:3]
                 # print(text_ch2)
@@ -62,6 +66,7 @@ if __name__=="__main__":
                 f.write("文件名:"+item+" 识别结果: "+text_ch+":"+text_alarm+"\n")
             except IOError:
                 print("Error: 没有找到文件或读取文件失败")
+                print(IOError.errno)
             else:
                 continue
         f.close()
